@@ -9,12 +9,11 @@ import {
 } from "#root/bot/context.js";
 import {
   adminFeature,
-  languageFeature,
   unhandledFeature,
   welcomeFeature,
+  menuFeature
 } from "#root/bot/features/index.js";
 import { errorHandler } from "#root/bot/handlers/index.js";
-import { i18n, isMultipleLocales } from "#root/bot/i18n.js";
 import { updateLogger } from "#root/bot/middlewares/index.js";
 import { config } from "#root/config.js";
 import { logger } from "#root/logger.js";
@@ -48,15 +47,13 @@ export function createBot(token: string, options: Options = {}) {
       storage: sessionStorage,
     }),
   );
-  protectedBot.use(i18n);
 
+  // menuFeature
+  protectedBot.use(menuFeature);
+  
   // Handlers
   protectedBot.use(welcomeFeature);
   protectedBot.use(adminFeature);
-
-  if (isMultipleLocales) {
-    protectedBot.use(languageFeature);
-  }
 
   // must be the last handler
   protectedBot.use(unhandledFeature);
